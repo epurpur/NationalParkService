@@ -8,15 +8,16 @@ searchBtn.on("click", () => {
     console.log(fullName);
 });
 
-var fullName = searchInput.val();
+var fullName = "";
 
 
-var url = "https://developer.nps.gov/api/v1/parks?q-"+ fullName +"&api_key=4eqRjnFCnxWx7DY3KDrv1DW73hwKeHabImKsqdEi";
+var url = "https://developer.nps.gov/api/v1/parks?q="+ fullName +"&api_key=4eqRjnFCnxWx7DY3KDrv1DW73hwKeHabImKsqdEi";
 
 function getNpsData(){
-    url = "https://developer.nps.gov/api/v1/parks?q-"+ fullName +"&api_key=4eqRjnFCnxWx7DY3KDrv1DW73hwKeHabImKsqdEi";
+    fullName = searchInput.val();
+    url = "https://developer.nps.gov/api/v1/parks?q="+ fullName +"&api_key=4eqRjnFCnxWx7DY3KDrv1DW73hwKeHabImKsqdEi";
 
-
+console.log(url);
 
     fetch(url)
     .then(function (response){
