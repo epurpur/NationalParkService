@@ -28,6 +28,10 @@
   font-size: 20px;
 }  
 
+#hiddenSpan {
+  visibility: hidden;
+}
+
 /*************/
 /* Inset Map */
 /*************/
