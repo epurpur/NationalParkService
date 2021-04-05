@@ -1,12 +1,34 @@
 
+/**
+ * DOCUMENT LOAD
+ */
+
+//upon loadingthe document, get make API request
+document.onload = getNpsMapData()
+function getNpsMapData() {
+    //makes API getch request to get NPS data for all 466 National Park Service sites
+    var nps_api = "qds1ol7rZxTkBjYfmL11kwzK1q3eY7kwxODYb7qE"
+    var url = `https://developer.nps.gov/api/v1/parks?limit=500&api_key=${nps_api}`
+    fetch(url)
+        .then(function(response) {
+            return response.json()
+        })
+        .then(function(data) {
+            parseNPSData(data);
+        });
+}
+
+
+
 
 
 /**
- * Search bar with Autocomplete
+ * SEARCH BAR w/ AUTOCOMPLETE
  */
 
 //uses jQuery UI .autocomplete() function to make dropdown autocomplete list of park names for user to choose from
  $( function() {
+     //parkNames is a list of all 466 National Park Service sites including national parks, national monuments, national recreation areas, etc
     var parkNames = [
          "Abraham Lincoln Birthplace National Historical Park (abli)","Acadia National Park (acad)","Adams National Historical Park (adam)","African American Civil War Memorial (afam)","African Burial Ground National Monument (afbg)","Agate Fossil Beds National Monument (agfo)","Ala Kahakai National Historic Trail (alka)","Alagnak Wild River (alag)","Alaska Public Lands (anch)","Alcatraz Island (alca)",
          "Aleutian Islands World War II National Historic Area (aleu)","Alibates Flint Quarries National Monument (alfl)","Allegheny Portage Railroad National Historic Site (alpo)","American Memorial Park (amme)","Amistad National Recreation Area (amis)","Anacostia Park (anac)","Andersonville National Historic Site (ande)","Andrew Johnson National Historic Site (anjo)","Aniakchak National Monument & Preserve (ania)",
@@ -58,116 +80,70 @@
     ];
     $( "#tags" ).autocomplete({    //fills #tags ID with parkNames items
       source: parkNames
-    }).data( "ui-autocomplete" )._renderItem = function( ul, item ) {     
-                                                return $( "<li></li>" )
-                                                    .append( "<div>" + item.value + "</div>")
-                                                    .appendTo(ul) 
-                                                };
-  } );
+    })
+  });
 
 
 
-
-
-
-
-
-
-var searchInput = $('#park-search-input');
-var searchBtn = $('.search-button');
-
-searchBtn.on("click", () => {
-    getNpsData();
-    console.log(fullName);
-});
-
-var fullName = "";
-
-
+/**
+ * FUNCTIONS
+ */  
 
 
 function getNpsData(uniqueParkCode){
-    // fullName = searchInput.val();
     url = `https://developer.nps.gov/api/v1/parks?parkCode=${uniqueParkCode}&api_key=4eqRjnFCnxWx7DY3KDrv1DW73hwKeHabImKsqdEi`;
-
-console.log(url);
 
     fetch(url)
     .then(function (response){
         return response.json();
     })
-    .then(function(results){
-        console.log("results",results);
-       
+    .then(function(results){       
 
-        var parkName = $('#park-name');
-        var parkDesignation = $('#designation');
-        var parkDescription = $('#description');
-        var parkFee = $('#entrance-fee');
-        var parkActivities = $('#activities');
-        var parkImg = $('#img-link');
-
-        
-        parkName.text(" " + results.data[0].fullName);
-
-        parkDesignation.text(" " + results.data[0].designation);
-
-        // pushes activities into an array
-        var activitiesText = [];
-        var allActivities = results.data[0].activities;
-        for (var i=0; i < allActivities.length; i ++){
-            //gets text of the object and pushes into the array
-            activitiesText.push(" " + allActivities[i].name);
-            
-        }
-        //sets text to the webpage
-        parkActivities.text(activitiesText); 
-
-        parkImg.attr("src" , results.data[0].images[0].url);
-        
-        parkDescription.text(" " + results.data[0].description);
-        parkFee.text(" " + "$" + results.data[0].entranceFees[0].cost);
-
+        //fill data for respective park into HTML of page
+        fillNPSData(results);
     });
 };
 
 
 
+function fillNPSData(npsData) {
+    //takes NPS data returned from API request and fills HTML of page
+    
+    //selectors for elements to fill on HTML page
+    var parkName = $('#park-name');
+    var parkDesignation = $('#designation');
+    var parkDescription = $('#description');
+    var parkFee = $('#entrance-fee');
+    var parkActivities = $('#activities');
+    var parkImg = $('#img-link');
 
+    parkName.text(" " + npsData.data[0].fullName);                      //sets parkName  ex: Shenandoah National Park   
+    parkDesignation.text(" " + npsData.data[0].designation);            //sets parkDesignation  ex: National Park
+    parkDescription.text(" " + npsData.data[0].description);            //sets parkDescription  ex: "Big enough to be overwhelming, Black Canyon of the Gunnison..."
+    parkFee.text(" " + "$" + npsData.data[0].entranceFees[0].cost);     //sets entranceFee  ex: $20.00
 
+    // pushes activities into an array
+    var activitiesText = [];                                            //gets all activities and adds them to array  ex: [hiking, cycling, camping]
+    var allActivities = npsData.data[0].activities;
+    for (var i=0; i < allActivities.length; i ++){
+        //gets text of the object and pushes into the array
+        activitiesText.push(" " + allActivities[i].name);
+    }
+    //sets text to the webpage
+    parkActivities.text(activitiesText);                                //sets all activities ex: [hiking, cycling, camping]
 
-//upon loadingthe document, get make API request
-document.onload = getNpsMapData()
-function getNpsMapData() {
-    //makes API getch request to get NPS data for all 466 National Park Service sites
-    var nps_api = "qds1ol7rZxTkBjYfmL11kwzK1q3eY7kwxODYb7qE"
-    var url = `https://developer.nps.gov/api/v1/parks?limit=500&api_key=${nps_api}`
-    fetch(url)
-        .then(function(response) {
-            return response.json()
-        })
-        .then(function(data) {
-
-            var fullnames = []
-            var parkCodes = []
-
-            var mydata = data.data;
-            for (var i = 0; i < mydata.length; i++) {
-                fullnames.push([mydata[i].fullName, mydata[i].parkCode]);
-            }
-
-            console.log(fullnames);
-
-            parseNPSData(data);
-            
-        });
+    parkImg.attr("src" , npsData.data[0].images[0].url);                //sets parkImg. Sets image URL as src attribute of img tag. Just uses first image from available images
 }
+
+
+
 function parseNPSData(npsData) {
-//parses data for all NPS 
-    npsData = npsData.data;
-    console.log(npsData);
+    //parses data for all 466 NPS sites to display in map upon initial page load
+
+    npsData = npsData.data;                                      //data property holds actual information about sites
+
     var parsedDataArray = [];
-    var designations = []
+
     for (var i = 0; i < npsData.length; i++) {
         //get all unique designation values 
         var dataPackage = [];
@@ -177,17 +153,50 @@ function parseNPSData(npsData) {
         var lat = npsData[i].latitude;
         var lon = npsData[i].longitude;
         var designation = npsData[i].designation;
-        designations.push(designation);    //DELETE LATER
+        
         //add items to dataPackage
-        dataPackage.push(name, parkCode, lat, lon, designation);
+        dataPackage.push(name, parkCode, lat, lon, designation);  //packages info for each park into array ex: ['Zion National Park', 'zion', 36.457, -81.432, 'National Park']
         //add dataPackage to parsedDataArray
-        parsedDataArray.push(dataPackage);
+        parsedDataArray.push(dataPackage);                        //adds dataPackage to parsedDataArray
     }
     //draw markers on map
-    drawMapMarkers(parsedDataArray);
-    // //get all unique designations for parks, monuments, etc   DELETE THIS LATER
-    // let uniqueItems = [...new Set(designations)]
-    
+    drawMapMarkers(parsedDataArray);                              //uses parsedDataArray to draw markers on map
+}
+
+
+
+function drawMapMarkers(markerData) {
+    /**
+     * Draws map markers on leaflet map 
+     * 
+     * green marker for National Parks
+     * violet marker for National Monuments
+     * red marker for National Historic Sites
+     * gold marker for National Recreation Area
+     * blue marker for any other designation
+     * 
+     * popups are associated with each marker and allow user to click to see more information
+     */
+
+    //markerData[i][2], markerData[i][3] contain latitude, longitude of each site
+    for (var i = 0; i < markerData.length; i++) {
+        if (markerData[i][4] == 'National Park') {
+            var marker = L.marker([markerData[i][2], markerData[i][3]], {icon: greenIcon}).addTo(map); 
+            marker.bindPopup(`<div id="popup">${markerData[i][0]}</div><br><button class="popup-button" data-parkcode=${markerData[i][1]}>View More</button>`);          
+        } else if (markerData[i][4] == 'National Monument') {
+            var marker = L.marker([markerData[i][2], markerData[i][3]], {icon: violetIcon}).addTo(map);
+            marker.bindPopup(`<div id="popup">${markerData[i][0]}</div><br><button class="popup-button" data-parkcode=${markerData[i][1]}>View More</button>`);
+        } else if (markerData[i][4] == 'National Historic Site') {
+            var marker = L.marker([markerData[i][2], markerData[i][3]], {icon: redIcon}).addTo(map);
+            marker.bindPopup(`<div id="popup">${markerData[i][0]}</div><br><button class="popup-button" data-parkcode=${markerData[i][1]}>View More</button>`);
+        } else if (markerData[i][4] == 'National Recreation Area') {
+            var marker = L.marker([markerData[i][2], markerData[i][3]], {icon: goldIcon}).addTo(map);
+            marker.bindPopup(`<div id="popup">${markerData[i][0]}</div><br><button class="popup-button" data-parkcode=${markerData[i][1]}>View More</button>`);           
+        } else {
+            var marker = L.marker([markerData[i][2], markerData[i][3]]).addTo(map);
+            marker.bindPopup(`<div id="popup">${markerData[i][0]}</div><br><button class="popup-button" data-parkcode=${markerData[i][1]}>View More</button>`);           
+        }
+    }
 }
 
 
@@ -195,6 +204,9 @@ function parseNPSData(npsData) {
 /**
  * LEAFLET MAP
  */
+
+//set up styling for markers
+
 // green marker will be used for national parks
 var greenIcon = new L.Icon({
     iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
@@ -227,41 +239,12 @@ var goldIcon = new L.Icon({
     iconAnchor: [12, 41],
     popupAnchor: [1, -34],
   });
-  
-function drawMapMarkers(markerData) {
-    /**
-     * Draws map markers on leaflet map 
-     * 
-     * green marker for National Parks
-     * violet marker for National Monuments
-     * red marker for National Historic Sites
-     * gold marker for National Recreation Area
-     * blue marker for any other designation
-     * 
-     * popups are associated with each marker and allow user to click to see more information
-     */
-    console.log(markerData);
-    for (var i = 0; i < markerData.length; i++) {
-        if (markerData[i][4] == 'National Park') {
-            var marker = L.marker([markerData[i][2], markerData[i][3]], {icon: greenIcon}).addTo(map); 
-            marker.bindPopup(`<div id="popup">${markerData[i][0]}</div><br><button class="popup-button" data-parkcode=${markerData[i][1]}>View More</button>`);          
-        } else if (markerData[i][4] == 'National Monument') {
-            var marker = L.marker([markerData[i][2], markerData[i][3]], {icon: violetIcon}).addTo(map);
-            marker.bindPopup(`<div id="popup">${markerData[i][0]}</div><br><button class="popup-button" data-parkcode=${markerData[i][1]}>View More</button>`);
-        } else if (markerData[i][4] == 'National Historic Site') {
-            var marker = L.marker([markerData[i][2], markerData[i][3]], {icon: redIcon}).addTo(map);
-            marker.bindPopup(`<div id="popup">${markerData[i][0]}</div><br><button class="popup-button" data-parkcode=${markerData[i][1]}>View More</button>`);
-        } else if (markerData[i][4] == 'National Recreation Area') {
-            var marker = L.marker([markerData[i][2], markerData[i][3]], {icon: goldIcon}).addTo(map);
-            marker.bindPopup(`<div id="popup">${markerData[i][0]}</div><br><button class="popup-button" data-parkcode=${markerData[i][1]}>View More</button>`);           
-        } else {
-            var marker = L.marker([markerData[i][2], markerData[i][3]]).addTo(map);
-            marker.bindPopup(`<div id="popup">${markerData[i][0]}</div><br><button class="popup-button" data-parkcode=${markerData[i][1]}>View More</button>`);           
-        }
-    }
-}
+
+
+
 //set initial view of map
-var map = L.map('mapid').setView([37.697948, -97.314835], 4);  //12 sets initial location over middle of country at zoom level 5
+var map = L.map('mapid').setView([37.697948, -97.314835], 4);  //sets initial location over middle of country at zoom level 4
+
 //link to Leaflet tile layer
 L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
     attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
@@ -271,65 +254,40 @@ L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_toke
     zoomOffset: -1,
     accessToken: 'pk.eyJ1IjoiZXB1cnB1ciIsImEiOiJja24wYXlkZnEwbTNqMm9tbGdoM3R1OXE0In0.TCaPhnKXLVLFpJeUS1AKJQ'
 }).addTo(map);
-//map zoom on click to zoom level 7
+
+//upon clicking marker, map zooms to zoom level 7. This code is straight from leaflet docs
 map.on('popupopen', function(centerMarker) {
     const zoomLvl = 7;
     let cM = map.project(centerMarker.popup._latlng);
   
     cM.y -= centerMarker.popup._container.clientHeight / zoomLvl
-    // console.log(map.unproject(cM));
     map.setView(map.unproject(cM), zoomLvl, {animate: true});
   });
 
+
+
+/**
+ * BUTTONS
+ */
+
+
 //Event Listener for our 'View More' button in the map marker
 //Will use the data-parkCode attribute to make a an API request for that site
-
-
-
 $(document).on("click", ".popup-button" , function() {
-    console.log($(this).data("parkcode"));
-
     var uniqueParkCode = $(this).data('parkcode');
 
+    //make API call using parkCode as input. parkCode needed to make API call for specific park data
     getNpsData(uniqueParkCode);
-
-
 });
 
  
+//search Button at top of page. This controls the search box w/ autocomplete
+$('#searchBtn').click(function(event) {
+    var fullParkName = $('#tags').val();                                    //gets value of full park name of input ex: 'Zion National Park (zion)'
+    var stringArray = fullParkName.split(' (');                                  //splits fullParkName on ' (' left with array ex: ['Zion National Park', 'zion)']. Still have annoying remaining parenthesis
+    var uniqueParkCode = stringArray[1].substring(0, stringArray[1].length - 1)   //takes index 1 item and removes final parenthesis, leaving just the park code ex: 'zion'
 
-
-
-
-
-
-
-
-
-
-
-
-// function getDataTest() {
-//     //makes API getch request to get NPS data for all 466 National Park Service sites
-//     var term = 'Blue Ridge Parkway'
-//     var nps_api = "qds1ol7rZxTkBjYfmL11kwzK1q3eY7kwxODYb7qE"
-//     var url = `https://developer.nps.gov/api/v1/parks?q=${term}&api_key=${nps_api}`
-//     fetch(url)
-//         .then(function(response) {
-//             return response.json()
-//         })
-//         .then(function(data) {
-//             console.log(data);
-//         });
-//     }
-
-// getDataTest()
-
-
-
-
-
-
-
-
+    //make API call using parkCode as input. parkCode needed to make API call for specific park data
+    getNpsData(uniqueParkCode);
+});
 
