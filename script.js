@@ -7,8 +7,8 @@
 document.onload = getNpsMapData()
 function getNpsMapData() {
     //makes API getch request to get NPS data for all 466 National Park Service sites
-    var nps_api = "qds1ol7rZxTkBjYfmL11kwzK1q3eY7kwxODYb7qE"
-    var url = `https://developer.nps.gov/api/v1/parks?limit=500&api_key=${nps_api}`
+    var nps_api_key = "qds1ol7rZxTkBjYfmL11kwzK1q3eY7kwxODYb7qE"
+    var url = `https://developer.nps.gov/api/v1/parks?limit=500&api_key=${nps_api_key}`
     fetch(url)
         .then(function(response) {
             return response.json()
@@ -264,7 +264,13 @@ map.on('popupopen', function(centerMarker) {
     map.setView(map.unproject(cM), zoomLvl, {animate: true});
   });
 
-
+//draw NPS boundaries on map using ESRI leaflet feature service
+const npsBoundaries = L.esri.featureLayer({
+    url: 'https://services1.arcgis.com/fBc8EJBxQRMcHlei/ArcGIS/rest/services/National_Park_Service_Boundaries/FeatureServer/0',
+    style: function (feature) {
+        return { color: 'red'};
+    }
+  }).addTo(map);
 
 /**
  * BUTTONS
