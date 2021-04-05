@@ -1,12 +1,52 @@
+
+/***************************/
+/* Autocomplete Search Box */
+/***************************/
+
+#searchBar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 50px;
+  margin: 10px 0 10px 0;
+}
+
+#tags {
+  width: 30%;
+  height: 40px;
+  font-size: 20px;
+}
+
+#searchBtn {
+  height: 45px;
+  width: 90px;
+  font-size: 20px;
+}
+
+.ui-menu-item-wrapper {
+  z-index: 500;   /* z-index keeps dropdown items on top of map */
+  font-size: 20px;
+}  
+
+/*************/
+/* Inset Map */
+/*************/
+
 /* Sets Height of MapID */ 
-#mapid { height: 700px; }
+#mapid { 
+  height: 700px;
+  z-index: 1;  /* z-index keeps map underneath of dropdown items */
+}
+
 /* styles marker popup boxes */
 #popup {
   font-size: 30px;
 }
+
 .popup-button {
   font-size: 25px;
 }
+
 /* Styles for color bars legend below map */
 #colors-legend {
   display: flex;
@@ -18,6 +58,7 @@
   font-size: 30px;
   margin-top: 10px;
 }
+
 /* styles for individual colors in color bar */
 .colors {width: 100%;}
 #green {background-color: #2AAD27}

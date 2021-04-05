@@ -1,3 +1,55 @@
+
+
+
+/**
+ * Search bar with Autocomplete
+ */
+
+//uses jQuery UI .autocomplete() function to make dropdown autocomplete list of park names for user to choose from
+ $( function() {
+    var parkNames = [
+      "ActionScript",
+      "AppleScript",
+      "Asp",
+      "BASIC",
+      "C",
+      "C++",
+      "Clojure",
+      "COBOL",
+      "ColdFusion",
+      "Erlang",
+      "Fortran",
+      "Groovy",
+      "Haskell",
+      "Java",
+      "JavaScript",
+      "Lisp",
+      "Perl",
+      "PHP",
+      "Python",
+      "Ruby",
+      "Scala",
+      "Scheme"
+    ];
+    $( "#tags" ).autocomplete({    //fills #tags ID with parkNames items
+      source: parkNames
+    }).data( "ui-autocomplete" )._renderItem = function( ul, item ) {     
+                                                return $( "<li></li>" )
+                                                    .data("item.autocomplete", item)
+                                                    .attr( "data-value", 'test' )      //THIS ADDS DATA VALUE TO THE PARENT ELEMENT WHICH IS AN <li>   START HERE docs: https://api.jqueryui.com/autocomplete/#method-_renderItem
+                                                    .append( "<div>" + item.value +"</div>")
+                                                    .appendTo(ul) 
+                                                };
+  } );
+
+
+
+
+
+
+
+
+
 var searchInput = $('#park-search-input');
 var searchBtn = $('.search-button');
 
@@ -10,7 +62,6 @@ var fullName = "";
 
 
 
-// var url = "https://developer.nps.gov/api/v1/parks?parkCode=fobu&api_key=4eqRjnFCnxWx7DY3KDrv1DW73hwKeHabImKsqdEi";
 
 function getNpsData(uniqueParkCode){
     // fullName = searchInput.val();
@@ -25,9 +76,7 @@ console.log(url);
     .then(function(results){
         console.log("results",results);
        
- 
 
-    
         var parkName = $('#park-name');
         var parkDesignation = $('#designation');
         var parkDescription = $('#description');
@@ -49,30 +98,14 @@ console.log(url);
             
         }
         //sets text to the webpage
-        parkActivities.text(activitiesText);
+        parkActivities.text(activitiesText); 
 
-        // $(allActivities).each(function(){
-        //     console.log($(this).attr(name));
-        // })   
-
-       parkImg.attr("src" , results.data[0].images[0].url);
+        parkImg.attr("src" , results.data[0].images[0].url);
         
-      parkDescription.text(" " + results.data[0].description);
-      parkFee.text(" " + "$" + results.data[0].entranceFees[0].cost);
+        parkDescription.text(" " + results.data[0].description);
+        parkFee.text(" " + "$" + results.data[0].entranceFees[0].cost);
 
-
-
- 
-        // for (var i = 0; i < results.length; i ++){
-        //     var searchResults = $('<li>');
-        //     searchResults.text(results[i]);
-        //     parkName.append(searchResults);
-            
-        // }
-        // console.log('search results', results[i]);
     });
-
-
 };
 
 
@@ -91,6 +124,19 @@ function getNpsMapData() {
             return response.json()
         })
         .then(function(data) {
+
+            var fullnames = []
+            var parkCodes = []
+
+            var mydata = data.data;
+            for (var i = 0; i < mydata.length; i++) {
+                fullnames.push(mydata[i].fullName);
+                parkCodes.push(mydata[i].parkCode);
+            }
+
+            console.log(fullnames);
+            console.log(parkCodes);
+
             parseNPSData(data);
             
         });
@@ -122,6 +168,9 @@ function parseNPSData(npsData) {
     // let uniqueItems = [...new Set(designations)]
     
 }
+
+
+
 /**
  * LEAFLET MAP
  */
@@ -239,33 +288,27 @@ $(document).on("click", ".popup-button" , function() {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-//`https://developer.nps.gov/api/v1/parks?limit=500&api_key=qds1ol7rZxTkBjYfmL11kwzK1q3eY7kwxODYb7qE` 
-
-
-
-// National Parks nps API
-// nps_api = "qds1ol7rZxTkBjYfmL11kwzK1q3eY7kwxODYb7qE"
-// // url = `https://developer.nps.gov/api/v1/parks?parkCode=shen&api_key=${nps_api}`    //makes api request to just one park
-// url = `https://developer.nps.gov/api/v1/parks?limit=500&api_key=${nps_api}`           //makes api request to all parks
-// function getNpsData() {
+// function getDataTest() {
+//     //makes API getch request to get NPS data for all 466 National Park Service sites
+//     var term = 'Blue Ridge Parkway'
+//     var nps_api = "qds1ol7rZxTkBjYfmL11kwzK1q3eY7kwxODYb7qE"
+//     var url = `https://developer.nps.gov/api/v1/parks?q=${term}&api_key=${nps_api}`
 //     fetch(url)
 //         .then(function(response) {
 //             return response.json()
 //         })
 //         .then(function(data) {
 //             console.log(data);
-//         })
-// }
-// getNpsData()
+//         });
+//     }
+
+// getDataTest()
+
+
+
+
+
+
+
+
+
