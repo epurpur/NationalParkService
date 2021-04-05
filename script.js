@@ -268,10 +268,12 @@ map.on('popupopen', function(centerMarker) {
 const npsBoundaries = L.esri.featureLayer({
     url: 'https://services1.arcgis.com/fBc8EJBxQRMcHlei/ArcGIS/rest/services/National_Park_Service_Boundaries/FeatureServer/0',
     style: function (feature) {
-        return { color: 'red'};
+        return { color: 'gray'};
     }
   }).addTo(map);
 
+
+  
 /**
  * BUTTONS
  */
