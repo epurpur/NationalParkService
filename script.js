@@ -61,6 +61,8 @@ function getNpsData(uniqueParkCode) {
             parkActivities.text(activitiesText);
 
             parkImg.attr("src", results.data[0].images[0].url);
+            // parkImg.style.height = 5;
+            // parkImg.style.width = 5;
 
             parkDescription.text(" " + results.data[0].description);
 
@@ -82,13 +84,32 @@ function getNpsData(uniqueParkCode) {
 
             localStorage.setItem('savedSearchArray', JSON.stringify(retrievedData));
 
-            searchButton1.text(retrievedData);
+            var newRetrievedData = [];
+            for (var i = 0; i < retrievedData.length; i++) {
+                newRetrievedData.push(retrievedData[i][1]);
 
-            console.log(localStorage);
+                console.log(newRetrievedData);
+
+            }
+
+            searchButton1.text(newRetrievedData[0]);
+            searchButton2.text(newRetrievedData[1]);
+            searchButton3.text(newRetrievedData[2]);
+            searchButton4.text(newRetrievedData[3]);
+            searchButton5.text(newRetrievedData[4]);
+
 
         });
 
 };
+
+$(document).on("click", "#saved-search-button", function() {
+    var uniqueParkName = $(this).data("#park-name");
+
+
+    getNpsData(uniqueParkName);
+});
+
 
 
 
