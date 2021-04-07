@@ -14,11 +14,19 @@ function getNpsMapData() {
             return response.json()
         })
         .then(function(data) {
+            //parse data for all 466 items in order to put on map
             parseNPSData(data);
+
+            //populate last 5 recently viewed items
+            var savedSearchArray = JSON.parse(localStorage.getItem("savedSearchArray") || "[]");
+            savedSearchArray.reverse();   //for some reason the array is populated backwards when page reloads. So I reverse array to fix this
+
+            //make button for each item in savedSearchArray
+            $.each(savedSearchArray, function(i, v){
+                makeButtons(savedSearchArray[i]);    //each item in savedSearchArray goes in as park data for makeButtons()
+            });
         });
 }
-
-
 
 
 
@@ -89,8 +97,37 @@ function getNpsMapData() {
  * FUNCTIONS
  */  
 
+function makeSiteInfoHTML(){
+    //draws HTML inside site info section. Not there when page first loads
+    $("#site-info-box").append(
+        "<div id='site-info'>" +
+            "<article>" +
+                "<p>Name:<span class='info-item' id='park-name'></span></p>" +
+            "</article>" +
+            "<article>" +
+                "<p>Designation:<span class='info-item' id='designation'></span></p>" +
+            "</article>" +
+            "<article>" +
+                "<p>Description:<span class='info-item' id='description'></span></p>" +
+            "</article>" +
+            "<article>" +
+                "<p>Entrance Fee:<span class='info-item' id='entrance-fee'></span></p>" +
+            "</article>" +
+            "<article>" +
+                "<p>Activities:<span class='info-item' id='activities'></span></p>" +
+            "</article>" +
+            "<article id='park-img'>" +
+                "<img id='img-link'>" +
+            "</article>" +
+        "</div>"
+    )
+}
+
+
 
 function getNpsData(uniqueParkCode){
+    // makes api call using unique park code to fetch data about a specific park
+
     url = `https://developer.nps.gov/api/v1/parks?parkCode=${uniqueParkCode}&api_key=4eqRjnFCnxWx7DY3KDrv1DW73hwKeHabImKsqdEi`;
 
     fetch(url)
@@ -99,10 +136,62 @@ function getNpsData(uniqueParkCode){
     })
     .then(function(results){       
 
+        //remove HTML for site information fields if it already exists (otherwise it just adds more)
+        $('#site-info').remove();
+
+        //make HTML for site information fields
+        makeSiteInfoHTML();
+
         //fill data for respective park into HTML of page
-        fillNPSData(results);
+        var parkData = fillNPSData(results);   //returns array of park code + park name ex: ['shen', 'Shenandoah National Park']
+
+        //Saves parkData to local storage in an array of arrays
+        saveToLocalStorage(parkData);
+
+        //make html button for new 'recent search' item
+        makeButtons(parkData);
+
     });
 };
+
+
+
+function makeButtons(parkData) {
+    //makes html button in 'recently viewed sites' section, containing name of saved search
+    //parkData contains an array of park code and park name ['shen', 'Shenandoah National Park']
+
+    $('#saved-searches').append(
+        `<button class='saved-search-button' type='button' data-parkcode=${parkData[0]}> ${parkData[1]}` +
+            "<i class = 'fas fa-search'></i>" +
+        "</button> "
+    );
+}
+
+
+
+function saveToLocalStorage(parkData) {
+    //saves current site into local storage in item 'savedSearchArray'
+
+    //gets 'savedSearchArray' from local storage. If nothing exists, return empty array
+    var savedSearchArray = JSON.parse(localStorage.getItem("savedSearchArray") || "[]");
+
+    //check to see if parkData exists in savedSearchArray
+    if (savedSearchArray.includes(parkData) == false) {
+        
+        //if there are less than 5 recent searches, add latest to array. If more than 5, remove last item and add new one to front of array
+        if (savedSearchArray.length < 5) {
+            savedSearchArray.unshift(parkData);
+        } else {
+            savedSearchArray.pop();                 //removes last item of array
+            savedSearchArray.unshift(parkData);
+        }
+    }
+
+
+
+    //set parkData to localStorage
+    localStorage.setItem("savedSearchArray", JSON.stringify(savedSearchArray));
+}
 
 
 
@@ -116,6 +205,7 @@ function fillNPSData(npsData) {
     var parkFee = $('#entrance-fee');
     var parkActivities = $('#activities');
     var parkImg = $('#img-link');
+    var parkCode = npsData.data[0].parkCode;
 
     parkName.text(" " + npsData.data[0].fullName);                      //sets parkName  ex: Shenandoah National Park   
     parkDesignation.text(" " + npsData.data[0].designation);            //sets parkDesignation  ex: National Park
@@ -133,6 +223,8 @@ function fillNPSData(npsData) {
     parkActivities.text(activitiesText);                                //sets all activities ex: [hiking, cycling, camping]
 
     parkImg.attr("src" , npsData.data[0].images[0].url);                //sets parkImg. Sets image URL as src attribute of img tag. Just uses first image from available images
+
+    return [parkCode, npsData.data[0].fullName];                        //ex: ['shen', 'Shenandoah National Park']
 }
 
 
@@ -278,7 +370,6 @@ const npsBoundaries = L.esri.featureLayer({
  * BUTTONS
  */
 
-
 //Event Listener for our 'View More' button in the map marker
 //Will use the data-parkCode attribute to make a an API request for that site
 $(document).on("click", ".popup-button" , function() {
@@ -288,14 +379,28 @@ $(document).on("click", ".popup-button" , function() {
     getNpsData(uniqueParkCode);
 });
 
- 
+
+
 //search Button at top of page. This controls the search box w/ autocomplete
-$('#searchBtn').click(function(event) {
+$('#searchButton').click(function(event) {
     var fullParkName = $('#tags').val();                                    //gets value of full park name of input ex: 'Zion National Park (zion)'
     var stringArray = fullParkName.split(' (');                                  //splits fullParkName on ' (' left with array ex: ['Zion National Park', 'zion)']. Still have annoying remaining parenthesis
     var uniqueParkCode = stringArray[1].substring(0, stringArray[1].length - 1)   //takes index 1 item and removes final parenthesis, leaving just the park code ex: 'zion'
 
     //make API call using parkCode as input. parkCode needed to make API call for specific park data
     getNpsData(uniqueParkCode);
+});
+
+
+
+//each 'recently viewed' item is a button and when clicked, fetches data for that site
+$(document).on("click", ".saved-search-button", function() {
+
+    //gets data-parkcode attribute
+    var uniqueParkCode = $(this).data('parkcode');
+
+    // get stored park codes from array and pass through getNpsData api
+    getNpsData(uniqueParkCode);
+
 });
 
