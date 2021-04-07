@@ -1,30 +1,57 @@
-/* Sets Height of MapID */ 
-#mapid { height: 700px; }
+/* Sets Height of MapID */
+
+#mapid {
+    height: 700px;
+}
+
+
 /* styles marker popup boxes */
+
 #popup {
-  font-size: 30px;
+    font-size: 30px;
 }
+
 .popup-button {
-  font-size: 25px;
+    font-size: 25px;
 }
+
+
 /* Styles for color bars legend below map */
+
 #colors-legend {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  line-height: 50px;
-  text-align: center;
-  align-items: center;
-  font-size: 30px;
-  margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    line-height: 50px;
+    text-align: center;
+    align-items: center;
+    font-size: 30px;
+    margin-top: 10px;
 }
+
+
 /* styles for individual colors in color bar */
-.colors {width: 100%;}
-#green {background-color: #2AAD27}
-#violet {background-color: #9C2BCB}
-#red {background-color: #CB2B3E}
-#gold {background-color: #FFD326}
-#blue {background-color: #2A81CB}
-      
 
+.colors {
+    width: 100%;
+}
 
+#green {
+    background-color: #2AAD27
+}
+
+#violet {
+    background-color: #9C2BCB
+}
+
+#red {
+    background-color: #CB2B3E
+}
+
+#gold {
+    background-color: #FFD326
+}
+
+#blue {
+    background-color: #2A81CB
+}

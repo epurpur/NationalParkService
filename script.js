@@ -16,59 +16,21 @@ function getNpsData(uniqueParkCode) {
     // fullName = searchInput.val();
     url = `https://developer.nps.gov/api/v1/parks?parkCode=${uniqueParkCode}&api_key=4eqRjnFCnxWx7DY3KDrv1DW73hwKeHabImKsqdEi`;
 
-    console.log(url);
+    // console.log(url);
 
     fetch(url)
         .then(function(response) {
             return response.json();
         })
         .then(function(results) {
-            console.log("results", results);
+            // console.log("results", results);
 
 
+            var NpsData = fillNPSData(results);
+            // console.log("nps data", NpsData);
 
-
-            var parkName = $('#park-name');
-            var parkDesignation = $('#designation');
-            var parkDescription = $('#description');
-            var parkFee = $('#entrance-fee');
-            var parkActivities = $('#activities');
-            var parkImg = $('#img-link');
-            var printSavedSearches = $('#saved-searches');
-
-            var searchButton1 = $('.search-button1');
-            var searchButton2 = $('.search-button2');
-            var searchButton3 = $('.search-button3');
-            var searchButton4 = $('.search-button4');
-            var searchButton5 = $('.search-button5');
-
-
-            parkName.text(" " + results.data[0].fullName);
-
-            var parkNameText = results.data[0].fullName
-
-            parkDesignation.text(" " + results.data[0].designation);
-
-            // pushes activities into an array
-            var activitiesText = [];
-            var allActivities = results.data[0].activities;
-            for (var i = 0; i < allActivities.length; i++) {
-                //gets text of the object and pushes into the array
-                activitiesText.push(" " + allActivities[i].name);
-
-            }
-            //sets text to the webpage
-            parkActivities.text(activitiesText);
-
-            parkImg.attr("src", results.data[0].images[0].url);
-            // parkImg.style.height = 5;
-            // parkImg.style.width = 5;
-
-            parkDescription.text(" " + results.data[0].description);
-
-            parkFee.text(" " + "$" + results.data[0].entranceFees[0].cost);
-
-
+            var uniqueParkCode = NpsData[0];
+            var parkNameText = NpsData[1];
 
             //Saves park code and park name to local storage in an array of arrays
             //prints array to button under previously viewed
@@ -88,28 +50,67 @@ function getNpsData(uniqueParkCode) {
             for (var i = 0; i < retrievedData.length; i++) {
                 newRetrievedData.push(retrievedData[i][1]);
 
-                console.log(newRetrievedData);
+                // console.log(newRetrievedData);
 
             }
 
-            searchButton1.text(newRetrievedData[0]);
-            searchButton2.text(newRetrievedData[1]);
-            searchButton3.text(newRetrievedData[2]);
-            searchButton4.text(newRetrievedData[3]);
-            searchButton5.text(newRetrievedData[4]);
+            // searchButton1.text(newRetrievedData[0]);
+            // searchButton2.text(newRetrievedData[1]);
+            // searchButton3.text(newRetrievedData[2]);
+            // searchButton4.text(newRetrievedData[3]);
+            // searchButton5.text(newRetrievedData[4]);
+
+            // this will make the html for our previously searched buttons
 
 
         });
 
 };
 
-$(document).on("click", "#saved-search-button", function() {
-    var uniqueParkName = $(this).data("#park-name");
 
 
-    getNpsData(uniqueParkName);
+$(document).on("click", ".saved-search-button", function() {
+
+    var uniqueParkCode = $(this).data('parkcode');
+    // console.log("blah" + uniqueParkCode);
+
+
+    // get stored park codes from array and pass through getNpsData api
+
+    getNpsData(uniqueParkCode);
+
 });
 
+
+
+function fillNPSData(npsData) {
+    //takes NPS data returned from API request and fills HTML of page
+
+    //selectors for elements to fill on HTML page
+    var parkName = $('#park-name');
+    var parkDesignation = $('#designation');
+    var parkDescription = $('#description');
+    var parkFee = $('#entrance-fee');
+    var parkActivities = $('#activities');
+    var parkImg = $('#img-link');
+    parkName.text(" " + npsData.data[0].fullName); //sets parkName  ex: Shenandoah National Park   
+    parkDesignation.text(" " + npsData.data[0].designation); //sets parkDesignation  ex: National Park
+    parkDescription.text(" " + npsData.data[0].description); //sets parkDescription  ex: "Big enough to be overwhelming, Black Canyon of the Gunnison..."
+    parkFee.text(" " + "$" + npsData.data[0].entranceFees[0].cost); //sets entranceFee  ex: $20.00
+    // pushes activities into an array
+    var parkCode = npsData.data[0].parkCode;
+    // var fullParkName = document.selectElementByID("park-name");
+    var activitiesText = []; //gets all activities and adds them to array  ex: [hiking, cycling, camping]
+    var allActivities = npsData.data[0].activities;
+    for (var i = 0; i < allActivities.length; i++) {
+        //gets text of the object and pushes into the array
+        activitiesText.push(" " + allActivities[i].name);
+    }
+    //sets text to the webpage
+    parkActivities.text(activitiesText); //sets all activities ex: [hiking, cycling, camping]
+    parkImg.attr("src", npsData.data[0].images[0].url); //sets parkImg. Sets image URL as src attribute of img tag. Just uses first image from available images
+    return [parkCode, npsData.data[0].fullName];
+};
 
 
 
@@ -134,7 +135,7 @@ function getNpsMapData() {
 function parseNPSData(npsData) {
     //parses data for all NPS 
     npsData = npsData.data;
-    console.log(npsData);
+    // console.log(npsData);
     var parsedDataArray = [];
     var designations = []
     for (var i = 0; i < npsData.length; i++) {
@@ -206,7 +207,7 @@ function drawMapMarkers(markerData) {
      * 
      * popups are associated with each marker and allow user to click to see more information
      */
-    console.log(markerData);
+    // console.log(markerData);
     for (var i = 0; i < markerData.length; i++) {
         if (markerData[i][4] == 'National Park') {
             var marker = L.marker([markerData[i][2], markerData[i][3]], { icon: greenIcon }).addTo(map);
@@ -253,11 +254,24 @@ map.on('popupopen', function(centerMarker) {
 
 
 $(document).on("click", ".popup-button", function() {
-    console.log($(this).data("parkcode"));
+    // console.log($(this).data("parkcode"));
 
     var uniqueParkCode = $(this).data('parkcode');
 
     getNpsData(uniqueParkCode);
 
+    makeButtons(uniqueParkCode);
 
 });
+
+
+
+function makeButtons(parkcode, fullParkName) {
+    // console.log('button', parkcode);
+
+    $('#saved-searches').append(
+        `<button class='btn btn-primary search-button1 saved-search-button' type='button' data-parkcode=${parkcode} data-parkname=${fullParkName}>` +
+        "<i class = 'fas fa-search'></i>" +
+        "</button> "
+    );
+}
