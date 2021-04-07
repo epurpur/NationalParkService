@@ -1,0 +1,145 @@
+:root {
+    background-color: snow;
+    background-image: image-set();
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+header {
+    display: flex;
+    justify-content: center;
+    align-content: flex-start;
+    /* margin-left: 190px;
+    margin-right: 332px; */
+    background-color: rgb(94, 23, 53);
+    font-size: 40px;
+ 
+    
+
+}
+h1{color: blue; 
+    margin-left: 0;
+    /* text-align:center;
+    display: flex;
+    justify-content: center;
+    align-content: center; */
+}
+.form-inline {
+    display: flex;
+    border: 0;
+    width: 600px;
+    margin: 0;
+
+}
+ .container_content {
+    width: 768px;
+    height: 800px;
+    background-color: rgb(184, 182, 174); 
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+} 
+.display-after-search {
+    background-color: rgb(184, 182, 174);
+    width: 768px;
+    height: 800px;
+    /* text-align: center; */
+    font-size: 30px;
+    display: flex;
+    /* justify-content: center; */
+    margin-top: 20px;
+}
+#searchbtn {
+    width: 100px;
+    display: flex;
+    justify-content: center;
+    align-content: flex-start;
+    margin-left: 0px;
+    border-radius: 0 10px 10px 0;
+    border: 2px solid transparent;
+    background-color:#2196F3;
+    height: 44.5px;
+    font-size: 16px  
+} 
+#search_bar {
+    width: 500px;
+    background-color: wheat;
+
+}
+.links {
+    background-color: rgb(184, 182, 174);
+    width: 768px;
+    height: 800px;
+    display: flex;
+    justify-content: flex-start;
+    font-size: 25px;
+    margin-top: 20px;
+}
+
+.colors-legend {
+    background-color: rgb(184, 182, 174);
+    width: 768px;
+    height: 800px;
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+     /* text-align: center; */
+    
+}
+h1 {
+    display: flex;
+ 
+    border-left: 0;
+    width: 768px;
+}
+.colors {width: 100%;}
+#green {
+    background-color: #2AAD27;
+    padding: 10px;
+    font-size: 30px;
+}
+#violet {
+    background-color: #9C2BCB;
+    padding: 10px;
+    font-size: 30px;
+}
+#red {
+    background-color: #CB2B3E;
+    padding: 10px;
+    font-size: 30px;
+}
+
+#gold {
+    
+    background-color: #FFD326;
+    padding: 10px;
+    font-size: 30px;
+}
+#blue {
+    background-color: #2A81CB;
+    padding: 10px;
+    font-size: 30px;
+}
+.fas {
+    background-color: rgb(47, 0, 255);
+    justify-content: start;
+    padding-top: 10px;
+    margin-top:40px ;
+    margin-bottom: 40px;
+    border-radius: 15px;
+    width: 40px;
+}
+.far {
+    font-size: 40px;
+}
+
+@media screen and (max-width: 768px) {
+    .container_content,
+    .display-after-search, 
+    .colors-legend,
+    .links,
+    .search_bar,
+     h1 {
+      flex-direction: column;
+    }
+
+}
