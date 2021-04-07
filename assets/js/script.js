@@ -146,11 +146,13 @@ function getNpsData(uniqueParkCode){
         var parkData = fillNPSData(results);   //returns array of park code + park name ex: ['shen', 'Shenandoah National Park']
 
         //Saves parkData to local storage in an array of arrays
-        saveToLocalStorage(parkData);
+        var alreadyExists = saveToLocalStorage(parkData);
 
-        //make html button for new 'recent search' item
-        makeButtons(parkData);
-
+        // if site does not already exists in 'recently viewed sites'...
+        if (alreadyExists == false) {
+            //make html button for new 'recent search' item
+            makeButtons(parkData);
+        }
     });
 };
 
@@ -175,9 +177,11 @@ function saveToLocalStorage(parkData) {
     //gets 'savedSearchArray' from local storage. If nothing exists, return empty array
     var savedSearchArray = JSON.parse(localStorage.getItem("savedSearchArray") || "[]");
 
-    //check to see if parkData exists in savedSearchArray
-    if (savedSearchArray.includes(parkData) == false) {
-        
+    var alreadyExists = true;
+
+    //if localStorage does not contain this site...
+    if (checkContains(savedSearchArray, parkData) == false) {
+        alreadyExists = false;
         //if there are less than 5 recent searches, add latest to array. If more than 5, remove last item and add new one to front of array
         if (savedSearchArray.length < 5) {
             savedSearchArray.unshift(parkData);
@@ -185,13 +189,18 @@ function saveToLocalStorage(parkData) {
             savedSearchArray.pop();                 //removes last item of array
             savedSearchArray.unshift(parkData);
         }
-    }
-
+    }   
 
 
     //set parkData to localStorage
     localStorage.setItem("savedSearchArray", JSON.stringify(savedSearchArray));
+
+    return alreadyExists;   //returns this value to determine if button needs to be added to 'recently viewed sites'
 }
+
+
+//checks if localStorage contains this site already (try to adapt arrow function to traditional function syntax)
+var checkContains = (parent, child) => parent.some(arr => JSON.stringify(arr) === JSON.stringify(child));
 
 
 
@@ -257,6 +266,10 @@ function parseNPSData(npsData) {
 
 
 
+/**
+ * LEAFLET MAP
+ */
+
 function drawMapMarkers(markerData) {
     /**
      * Draws map markers on leaflet map 
@@ -292,10 +305,6 @@ function drawMapMarkers(markerData) {
 }
 
 
-
-/**
- * LEAFLET MAP
- */
 
 //set up styling for markers
 
