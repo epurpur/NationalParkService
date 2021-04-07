@@ -74,9 +74,7 @@ $(document).on("click", ".saved-search-button", function() {
     var uniqueParkCode = $(this).data('parkcode');
     // console.log("blah" + uniqueParkCode);
 
-
     // get stored park codes from array and pass through getNpsData api
-
     getNpsData(uniqueParkCode);
 
 });
