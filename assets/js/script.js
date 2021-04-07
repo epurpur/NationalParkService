@@ -5,6 +5,7 @@
 
 //upon loadingthe document, get make API request
 document.onload = getNpsMapData()
+
 function getNpsMapData() {
     //makes API getch request to get NPS data for all 466 National Park Service sites
     var nps_api_key = "qds1ol7rZxTkBjYfmL11kwzK1q3eY7kwxODYb7qE"
@@ -19,7 +20,7 @@ function getNpsMapData() {
 
             //populate last 5 recently viewed items
             var savedSearchArray = JSON.parse(localStorage.getItem("savedSearchArray") || "[]");
-            savedSearchArray.reverse();   //for some reason the array is populated backwards when page reloads. So I reverse array to fix this
+            savedSearchArray = savedSearchArray.slice(0, 5);  //take just the first five items from localStorage to begin
 
             //make button for each item in savedSearchArray
             $.each(savedSearchArray, function(i, v){
@@ -182,13 +183,7 @@ function saveToLocalStorage(parkData) {
     //if localStorage does not contain this site...
     if (checkContains(savedSearchArray, parkData) == false) {
         alreadyExists = false;
-        //if there are less than 5 recent searches, add latest to array. If more than 5, remove last item and add new one to front of array
-        if (savedSearchArray.length < 5) {
-            savedSearchArray.unshift(parkData);
-        } else {
-            savedSearchArray.pop();                 //removes last item of array
-            savedSearchArray.unshift(parkData);
-        }
+        savedSearchArray.unshift(parkData);  //add item to front of savedSearchArray
     }   
 
 
