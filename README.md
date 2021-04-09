@@ -1,6 +1,10 @@
 # Project1: National Park and Historic Site Finder #
 
-
+Team Members:<br>
+Dereje Ayele<br>
+Casey Johnson<br>
+Erich Purpur<br>
+Alexander Vandenesse<br>
 
 
 
