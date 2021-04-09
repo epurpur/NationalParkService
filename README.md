@@ -61,4 +61,19 @@ THEN the site is populated with the following fields:<br>
     --Entrance Fee<br>
     --Activites<br>
     -- + an image of the park
+    
+    ## Technologies Used
+    
+    --Materialize (CSS Framework)<br>
+    --Google Fonts<br>
+    --jQuery<br>
+    --jQuery UI<br>
+    
+    --Server Side APIs:<br>
+    
+    National Park Service API (https://www.nps.gov/subjects/developer/api-documentation.htm)
+    
+    Leaflet Map API - mapping functionality (https://leafletjs.com/)
+    
+    ESRI Leaflet - National Parks boundary feature service (https://esri.github.io/esri-leaflet/)
 
