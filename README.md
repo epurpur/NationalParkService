@@ -64,12 +64,12 @@ THEN the site is populated with the following fields:<br>
     
     ## Technologies Used
     
-    --Materialize (CSS Framework)<br>
+    --Materialize (CSS Framework)
     --Google Fonts<br>
     --jQuery<br>
     --jQuery UI<br>
     
-    --Server Side APIs:<br>
+    --Server Side APIs:
     
     National Park Service API (https://www.nps.gov/subjects/developer/api-documentation.htm)
     
