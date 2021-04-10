@@ -278,10 +278,15 @@ p {
     }
 }
 
-@media screen and (max-width: 970px) {
+@media screen and (max-width: 990px) {
     #colors-legend {
         font-size: 12.5px
     }
+
+    #headerText {
+        line-height: 50px;
+    }
+
 }
 
 @media screen and (max-width: 835px) {
@@ -323,7 +328,7 @@ p {
     }
 }
 
-@media screen and (max-width: 450px) {
+@media screen and (max-width: 475px) {
     #img-link {
         height: 300px;
         width: 300px;
@@ -331,6 +336,10 @@ p {
     #tags {
         width: 225px;
         font-size: 10px;
+    }
+
+    #headerText {
+        line-height: 25px;
     }
 }
 
