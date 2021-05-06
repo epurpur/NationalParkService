@@ -369,14 +369,30 @@ map.on('popupopen', function(centerMarker) {
     map.setView(map.unproject(cM), zoomLvl, { animate: true });
 });
 
-//draw NPS boundaries on map using ESRI leaflet feature service
-const npsBoundaries = L.esri.featureLayer({
-    url: 'https://services1.arcgis.com/fBc8EJBxQRMcHlei/ArcGIS/rest/services/National_Park_Service_Boundaries/FeatureServer/0',
-    style: function(feature) {
-        return { color: 'gray' };
-    }
-}).addTo(map);
+//only show NPS boundaries if above zoom level (higher number = more zoomed in)
+var showLabelZoom = 7;
 
+//draw NPS boundaries on map using ESRI leaflet feature service
+
+
+//playing with zoom
+map.on('zoomend', function() {
+
+    const npsBoundaries = L.esri.featureLayer({
+        url: 'https://services1.arcgis.com/fBc8EJBxQRMcHlei/ArcGIS/rest/services/National_Park_Service_Boundaries/FeatureServer/0',
+        style: function(feature) {
+            return { color: 'gray' };
+        }
+    });
+
+    if (map.getZoom() > 6.5) {
+        map.addLayer(npsBoundaries);
+    } else if (map.getZoom() <= 6.5) {
+        map.removeLayer(npsBoundaries);
+    }
+    console.log('HasLayer? ', map.hasLayer(npsBoundaries)) 
+    console.log('Zoomed in to level: ', map.getZoom())
+});
 
 
 /**
