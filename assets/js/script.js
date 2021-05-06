@@ -168,7 +168,7 @@ function makeButtons(parkData) {
     //parkData contains an array of park code and park name ['shen', 'Shenandoah National Park']
 
     $('#saved-searches').append(
-        `<button class='saved-search-button' type='button' data-parkcode=${parkData[0]}> ${parkData[1]}` +
+        `<button class='saved-search-button' type='button' data-parkcode=${parkData[0]}><a href="#site-info-box"> ${parkData[1]} </a>` +
         "<i class = 'fas fa-search'></i>" +
         "</button> "
     );
@@ -291,19 +291,19 @@ function drawMapMarkers(markerData) {
     for (var i = 0; i < markerData.length; i++) {
         if (markerData[i][4] == 'National Park') {
             var marker = L.marker([markerData[i][2], markerData[i][3]], { icon: greenIcon }).addTo(map);
-            marker.bindPopup(`<div id="popup">${markerData[i][0]}</div><br><button class="popup-button" data-parkcode=${markerData[i][1]}>View More</button>`);
+            marker.bindPopup(`<div id="popup">${markerData[i][0]}</div><br><button class="popup-button" data-parkcode=${markerData[i][1]}><a href="#site-info-box">View More</a></button>`);
         } else if (markerData[i][4] == 'National Monument') {
             var marker = L.marker([markerData[i][2], markerData[i][3]], { icon: violetIcon }).addTo(map);
-            marker.bindPopup(`<div id="popup">${markerData[i][0]}</div><br><button class="popup-button" data-parkcode=${markerData[i][1]}>View More</button>`);
+            marker.bindPopup(`<div id="popup">${markerData[i][0]}</div><br><button class="popup-button" data-parkcode=${markerData[i][1]}><a href="#site-info-box">View More</a></button>`);
         } else if (markerData[i][4] == 'National Historic Site') {
             var marker = L.marker([markerData[i][2], markerData[i][3]], { icon: redIcon }).addTo(map);
-            marker.bindPopup(`<div id="popup">${markerData[i][0]}</div><br><button class="popup-button" data-parkcode=${markerData[i][1]}>View More</button>`);
+            marker.bindPopup(`<div id="popup">${markerData[i][0]}</div><br><button class="popup-button" data-parkcode=${markerData[i][1]}><a href="#site-info-box">View More</a></button>`);
         } else if (markerData[i][4] == 'National Recreation Area') {
             var marker = L.marker([markerData[i][2], markerData[i][3]], { icon: goldIcon }).addTo(map);
-            marker.bindPopup(`<div id="popup">${markerData[i][0]}</div><br><button class="popup-button" data-parkcode=${markerData[i][1]}>View More</button>`);
+            marker.bindPopup(`<div id="popup">${markerData[i][0]}</div><br><button class="popup-button" data-parkcode=${markerData[i][1]}><a href="#site-info-box">View More</a></button>`);
         } else {
             var marker = L.marker([markerData[i][2], markerData[i][3]]).addTo(map);
-            marker.bindPopup(`<div id="popup">${markerData[i][0]}</div><br><button class="popup-button" data-parkcode=${markerData[i][1]}>View More</button>`);
+            marker.bindPopup(`<div id="popup">${markerData[i][0]}</div><br><button class="popup-button" data-parkcode=${markerData[i][1]}><a href="#site-info-box">View More</a></button>`);
         }
     }
 }
