@@ -8,7 +8,7 @@ Alexander Vandenesse (vandenessea96@gmail.com)<br>
 
 
 
-[Link to Website](https://epurpur.github.io/Project1_NationalParkService/)
+## [View Live Application](https://epurpur.github.io/Project1_NationalParkService/)
 
 **![Screenshot of Website](./assets/images/NPS_Page_Load.png)**<br>
 **![Screenshot of Website](./assets/images/NPS_Search_AutoComplete.png)**<br>
