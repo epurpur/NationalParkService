@@ -373,25 +373,22 @@ map.on('popupopen', function(centerMarker) {
 var showLabelZoom = 7;
 
 //draw NPS boundaries on map using ESRI leaflet feature service
+const npsBoundaries = L.esri.featureLayer({
+    url: 'https://services1.arcgis.com/fBc8EJBxQRMcHlei/ArcGIS/rest/services/National_Park_Service_Boundaries/FeatureServer/0',
+    style: function(feature) {
+        return { color: 'gray' };
+    }
+});
 
-
-//playing with zoom
+//Zoom levels for NPS boundaries layer. If below zoom level 6.5, display layer. If not, don't display layer.
 map.on('zoomend', function() {
 
-    const npsBoundaries = L.esri.featureLayer({
-        url: 'https://services1.arcgis.com/fBc8EJBxQRMcHlei/ArcGIS/rest/services/National_Park_Service_Boundaries/FeatureServer/0',
-        style: function(feature) {
-            return { color: 'gray' };
-        }
-    });
-
-    if (map.getZoom() > 6.5) {
+    if (map.getZoom() > 6.5 && !map.hasLayer(npsBoundaries)) {
         map.addLayer(npsBoundaries);
-    } else if (map.getZoom() <= 6.5) {
+    } 
+    if (map.getZoom() <= 6.5 && map.hasLayer(npsBoundaries)) {
         map.removeLayer(npsBoundaries);
     }
-    console.log('HasLayer? ', map.hasLayer(npsBoundaries)) 
-    console.log('Zoomed in to level: ', map.getZoom())
 });
 
 
