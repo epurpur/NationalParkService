@@ -13,7 +13,7 @@
   10. [Github](#Github)
   11. [E-mail](#Email)  
   
-  ##Acceptance Criteria
+  ## Acceptance Criteria
   All acceptance criteria listed at end of this page was full meet.
 
   ## Description
