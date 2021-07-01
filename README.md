@@ -17,7 +17,7 @@
   All acceptance criteria listed at end of this page was full meet.
 
   ## Description
-AS A person interested in national parks and historic sites, I want to access a polished mobile-first UI to easily search for historic sites and/or national parks either by location, or by name. So I can view information such as fees, activities, description, and designation - and view my last 5 saved searches.
+As a person interested in national parks and historic sites, I want to access a polished mobile-first UI to easily search for historic sites and/or national parks either by location, or by name. So I can view information such as fees, activities, description, and designation - and view my last 5 saved searches.
   
   ## Installation
   N/A
