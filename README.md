@@ -17,7 +17,7 @@
   All acceptance criteria listed at end of this page was full meet.
 
   ## Description
-As a person interested in national parks and historic sites, I want to access a polished mobile-first UI to easily search for historic sites and/or national parks either by location, or by name. So I can view information such as fees, activities, description, and designation - and view my last 5 saved searches.
+This app is good solution for finding sites administered by the National Park Service. It's presented with a drop down auto-complete list of potential sites and the previously searched button displaying park name and saved for future.
   
   ## Installation
   N/A
