@@ -23,7 +23,7 @@ This app is good solution for finding sites administered by the National Park Se
   N/A
   
   ## Usage
-Good solution for finding National Park and Historic site. It's presented with a drop down auto-complete list of potential sites and the previously searched button displaying park name and seved for future.
+Good solution for finding National Park and Historic site. It's presented with a drop down auto-complete list of potential sites and the previously searched button displaying park name and saved for future.
 
   ## Deployed Link and Screenshots
   [Deployed Link](https://epurpur.github.io/NationalParkService/)<br>
